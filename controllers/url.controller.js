@@ -42,4 +42,40 @@ async function createShortUrl(req, res) {
   }
 }
 
-module.exports = { createShortUrl };
+async function redirectToOriginalUrl(req, res) {
+  try {
+    const { id } = req.params;
+
+    console.log(id);
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Id is required",
+      });
+    }
+
+    const Url = await UrlModel.findOneAndUpdate(
+      { shortID: id },
+      {
+        $push: {
+          analytics: {
+            timestamps: Date.now(),
+          },
+        },
+      },
+    );
+
+    console.log(Url);
+
+    res.redirect(Url.originalURL);
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      err: err.stack,
+    });
+  }
+}
+
+module.exports = { createShortUrl, redirectToOriginalUrl };
