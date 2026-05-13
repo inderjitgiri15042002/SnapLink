@@ -1,92 +1,97 @@
-SnapLink API
+# SnapLink API 🚀
+
 A high-performance, minimalist URL shortener with built-in click tracking and analytics.
 
-SnapLink allows users to transform long, cumbersome URLs into short, shareable links. Built with Node.js, Express, and MongoDB, it tracks every visit to provide real-time click data.
+SnapLink transforms long URLs into short, shareable links while tracking every visit in real time. Built using Node.js, Express, and MongoDB.
 
-🚀 Features
-Link Shortening: Generates unique 6-character IDs using nanoid.
+---
 
-Instant Redirection: High-speed redirection to original URLs.
+## 🚀 Features
 
-Real-time Analytics: Tracks total visits and stores precise timestamps for every click.
+- 🔗 **Link Shortening** – Generates unique 6-character IDs using Nanoid  
+- ⚡ **Instant Redirection** – Fast redirect to original URLs  
+- 📊 **Real-time Analytics** – Tracks clicks with timestamps  
+- 🏗️ **Scalable Architecture** – Clean MVC structure  
+- 🛡️ **Reliable Data** – Mongoose validation & unique constraints  
 
-Scalable Architecture: Clean MVC (Model-View-Controller) structure.
+---
 
-Reliable Data: Enforces unique constraints and validation using Mongoose.
+## 🛠️ Tech Stack
 
-🛠️ Tech Stack
-Runtime: Node.js
+- **Runtime:** Node.js  
+- **Framework:** Express.js  
+- **Database:** MongoDB (Mongoose)  
+- **ID Generator:** Nanoid  
 
-Framework: Express.js
+---
 
-Database: MongoDB (via Mongoose)
+## 📂 Project Structure
 
-ID Generation: Nanoid
-
-📂 Project Structure
-Bash
+```bash id="structure1"
 ├── models
-│   └── url.model.js     # Mongoose Schema & Database Logic
+│   └── url.model.js        # Mongoose Schema
 ├── controllers
-│   └── url.controller.js # Request handlers (Business Logic)
+│   └── url.controller.js   # Business logic
 ├── routes
-│   └── url.router.js     # API Endpoints
-├── app.js               # Express app configuration
-└── server.js            # Entry point & DB Connection
+│   └── url.router.js       # API routes
+├── app.js                  # Express configuration
+└── server.js               # Entry point
+
 📡 API Endpoints
 1. Create Short URL
 URL: /api/url
-
 Method: POST
-
-Body: { "url": "[https://example.com](https://example.com)" }
-
-Response: Returns a unique shortID and link details.
-
+Body:
+{
+  "url": "https://example.com"
+}
+Response:
+{
+  "success": true,
+  "shortId": "abc123",
+  "originalUrl": "https://example.com"
+}
 2. Redirect to Original URL
 URL: /api/:id
-
 Method: GET
-
-Action: Automatically updates the analytics array and redirects the browser.
-
+Action: Redirects user and stores analytics (click timestamp)
 3. Get Analytics
 URL: /api/url/analytics/:shortId
-
 Method: GET
-
-Response: Returns the total click count and a detailed history of timestamps.
-
+Response:
+{
+  "success": true,
+  "totalVisits": 10,
+  "analytics": [
+    {
+      "clickedAt": "2026-05-13T10:00:00.000Z"
+    }
+  ]
+}
 ⚙️ Installation & Setup
-Clone the repository:
-
-Bash
+1. Clone repository
 git clone https://github.com/yourusername/snaplink-api.git
 cd snaplink-api
-Install dependencies:
-
-Bash
+2. Install dependencies
 npm install
-Set up Environment Variables:
-Create a .env file and add your MongoDB connection string:
+3. Setup environment variables
 
-Code snippet
-    PORT=8001
-    MONGODB_URL=mongodb://127.0.0.1:27017/short-url
-    ```
+Create a .env file:
 
-4.  **Run the application:**
-    
-```bash
-    npm start
-    ```
+PORT=8001
+MONGODB_URL=mongodb://127.0.0.1:27017/short-url
+4. Run server
+npm start
+📝 Note
 
----
+Analytics are stored using MongoDB’s atomic $push operation to ensure safe updates during high traffic.
 
-## **📝 Note on the Implementation**
-The project uses the `$push` operator in MongoDB to ensure that analytics tracking is **atomic**. This prevents data loss during high-traffic scenarios where multiple users might click the same link simultaneously.
+📌 Commit Message
+docs: add complete README with API documentation
 
 ---
 
-### **Commit Message for this README:**
-> **docs: create comprehensive README with API documentation**
+If you want next upgrade, I can help you:
+👉 add **Swagger API docs**
+👉 or make this README GitHub-ready with badges + screenshots  
+👉 or design a **frontend UI for SnapLink**
