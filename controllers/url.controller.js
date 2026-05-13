@@ -46,8 +46,6 @@ async function redirectToOriginalUrl(req, res) {
   try {
     const { id } = req.params;
 
-    console.log(id);
-
     if (!id) {
       return res.status(400).json({
         success: false,
@@ -66,8 +64,6 @@ async function redirectToOriginalUrl(req, res) {
       },
     );
 
-    console.log(Url);
-
     res.redirect(Url.originalURL);
   } catch (err) {
     res.status(500).json({
@@ -78,4 +74,32 @@ async function redirectToOriginalUrl(req, res) {
   }
 }
 
-module.exports = { createShortUrl, redirectToOriginalUrl };
+async function getUrlAnalytics(req, res) {
+  try {
+    const { id } = req.params;
+
+    const urlData = await UrlModel.findOne({ shortId: id });
+
+    if (!urlData) {
+      return res.status(404).json({
+        success: false,
+        message: "URL not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Analytics fetched successfully",
+      totalClicks: urlData.analytics.length,
+      history: urlData.analytics,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: err.message,
+    });
+  }
+}
+
+module.exports = { createShortUrl, redirectToOriginalUrl, getUrlAnalytics };
